@@ -1,0 +1,123 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace SolvingGUI_level2
+{
+    class PTBac_2
+    {
+        public double a, b, c;
+        public double x1, x2;
+        private double delta;
+        public int k;
+
+        public void PTBac2()
+        {
+            delta = b * b - 4 * a * c;
+            if (delta < 0)
+                k = -1;
+            if (delta > 0)
+            {
+                k = 1;
+                x1 = (-b + (double)Math.Sqrt(delta)) / 2 / a;
+                x2 = (-b - (double)Math.Sqrt(delta)) / 2 / a;
+            }
+            if (delta == 0)
+            {
+                k = 0;
+                x1 = -b / 2 / a;
+                x2 = x1;
+            }
+        }
+    }
+
+    class PTBac_1
+    {
+        public double a, b, x;
+        public void PTBac1()
+        {
+            x = -b / a;
+        }
+    }
+
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void PbCl_Click(object sender, EventArgs e)
+        {
+            txtA.Text = "";
+            txtB.Text = "";
+            txtC.Text = "";
+            txtStatus.Text = "";
+            txtX1.Text = "";
+            txtX2.Text = "";
+        }
+
+        private void PbSol_Click(object sender, EventArgs e)
+        {
+            double a, b, c;
+
+
+            //Convert string to double type;
+            double.TryParse(txtA.Text, out a);
+            double.TryParse(txtB.Text, out b);
+            double.TryParse(txtC.Text, out c);
+
+            //Create new object;
+            PTBac_2 PT1 = new PTBac_2();
+            PT1.a = a;
+            PT1.b = b;
+            PT1.c = c;
+
+            PTBac_1 PT2 = new PTBac_1();
+            PT2.a = b;
+            PT2.b = c;
+
+            //Solving
+            PT1.PTBac2();
+            PT2.PTBac1();
+            if (a != 0)
+            {
+                if (PT1.k == -1)
+                    txtStatus.Text = "Phuong trinh vo nghiem!";
+                if (PT1.k == 0)
+                {
+                    txtStatus.Text = "Phuong trinh co nghiem kep: ";
+                    txtX1.Text = PT1.x1.ToString();
+                    txtX2.Text = PT1.x2.ToString();
+                }
+                if (PT1.k == 1)
+                {
+                    txtStatus.Text = "Phuong trinh co 2 nghiem phan biet: ";
+                    txtX1.Text = PT1.x1.ToString();
+                    txtX2.Text = PT1.x2.ToString();
+                }
+            }
+            else
+            {
+                if (b != 0)
+                {
+                    txtStatus.Text = "Phuong trinh co nghiem la: ";
+                    txtX1.Text = PT2.x.ToString();
+                    txtX2.Text = PT2.x.ToString();
+                }
+                else
+                {
+                    if (c == 0)
+                        txtStatus.Text = "Phuong trinh vo so nghiem!";
+                    else
+                        txtStatus.Text = "Phuong trinh vo nghiem!";
+                }
+            }
+        }
+    }
+}
